@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended: true}))
 app.set("json spaces", 2);
 //cors
 app.use(cors({
-  origin: ["https://3000-amitpareshm-hackathonsn-bfipn5q18xi.ws-us84.gitpod.io"],
+  origin: ["https://api.asaifee.ml", "https://paradigm.asaifee.ml", "https://predict.asaifee.ml"],
   methods: ["GET", "POST", "DELETE"],
   allowedHeaders: ["Authorization", "Content-Type"],
   maxAge: 86400,
@@ -26,7 +26,7 @@ app.use(cors({
 
 app.use("/api", router);
 
-app.use("/uploads", express.static(path.join(__dirname, "/../uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "/../uploads")));
 // app.use(express.static(path.join(__dirname, "/../frontend/build")));
 
 app.get("*", (req, res) => {
