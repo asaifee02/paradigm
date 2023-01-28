@@ -61,7 +61,7 @@ function Post(props){
         
         <div className="post">
 <div className="post__info">
-    <small><Created at Date={props.time}/></small>
+    {/* <small><Created at Date={props.time}/></small> */}
 </div>
 <div className="post__body">
     <div className="post__question">
