@@ -9,7 +9,7 @@ WORKDIR /home/node
 COPY --chown=node:node package*.json ./
 
 # RUN npm install
-RUN npm ci --only=production --force
+RUN npm install --force && npm ci --only=production --force
 
 # Bundle app source
 COPY --chown=node:node . .
