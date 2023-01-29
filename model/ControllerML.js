@@ -42,7 +42,7 @@ export const predict2 = async (req, res, next)=> {
 
         var dataToSend;
         // spawn new child process to call the python script
-        const python = await spawn1.spawn('python', ['script1.py',req.body.arg1,req.body.arg2,req.body.arg3]);
+        const python = await spawn1.spawn('python', ['script1.py',req.body.Quantity,req.body.Volume,req.body.source,req.body.destination]);
         // collect data from script
         python.stdout.on('data', function (data) {
          console.log('Pipe data from python script ...');
@@ -54,7 +54,7 @@ export const predict2 = async (req, res, next)=> {
             console.log(`child process close all stdio with code ${code}`);
             // send data to browser
             // res.send(dataToSend)
-            res.status(200).send({"predicteddata":dataToSend,"message":"Congrats in ML!"})  
+            res.status(200).send({"predicteddata":dataToSend,"message":"Predicted Price!"})  
             });
            
 
@@ -69,3 +69,4 @@ export const predict2 = async (req, res, next)=> {
 
 
 }
+
