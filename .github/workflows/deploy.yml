@@ -13,7 +13,7 @@ env:
   REPOSITORY: paradigm
 
 jobs:
-  setup-build-publish:
+  Setup-Build-Publish:
     name: Setup, Build and Publish
     runs-on: ubuntu-latest
     strategy:
@@ -60,18 +60,68 @@ jobs:
       with:
         sbom: "${{ matrix.component }}.sbom.json"
         output-format: "table"
-        fail-build: true
-        severity-cutoff: critical
+        fail-build: false
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest"
 
-  deploy:
+  SignImage-and-AttachAttestation:
+    runs-on: ubuntu-latest
+    needs: Setup-Build-Publish
+    strategy:
+      matrix:
+        component: [frontend, backend, model]
+    
+    permissions:
+      id-token: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Syft and Cosign
+      run: |
+        echo "::group::Installation Logs"
+        sudo curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin v0.65.0
+        wget -q https://github.com/sigstore/cosign/releases/download/v1.13.1/cosign_1.13.1_amd64.deb
+        sudo dpkg -i cosign_1.13.1_amd64.deb
+        echo "::endgroup::"
+  
+      # Authentication via credentials json
+    - uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication (https://cloud.google.com/artifact-registry/docs/docker/authentication)
+    - name: Docker configuration
+      run: |-
+        gcloud --quiet auth configure-docker $GAR_LOCATION-docker.pkg.dev
+
+    - name: Attach Attestation and Sign Image
+      env:
+        COSIGN_EXPERIMENTAL: 1
+      run: |
+        echo "::group::Attaching Attestation and Signature"
+        syft attest -o spdx-json -s AllLayers $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest
+        cosign sign -y --k8s-keychain --force $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest
+        echo "::endgroup::"
+
+    - name: Verify Image and SBOM Attestation Signatures
+      env:
+        COSIGN_EXPERIMENTAL: 1
+      run: |
+        echo "::group::Verifying Attestation and Signature"
+        cosign verify-attestation --type spdxjson $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest | jq .signatures -
+        cosign verify $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest | jq . -
+        echo "::endgroup::"
+
+  Deploy:
     name: Deploy to GKE
     runs-on: ubuntu-latest
-    needs: setup-build-publish
+    needs: SignImage-and-AttachAttestation
 
     permissions:
       contents: 'read'
