@@ -1,36 +1,12 @@
-import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
-import 'rsuite-table/lib/less/index.less';
-const dataList = [
-    { id: 1, name: 'a', email: 'a@email.com', avartar: '...' },
-    { id: 2, name: 'b', email: 'b@email.com', avartar: '...' },
-    { id: 3, name: 'c', email: 'c@email.com', avartar: '...' }
-  ];
-function Orders(){
-    return 
-    (
-        <>
-         <Table data={dataList}>
-    <Column width={100} sortable fixed resizable>
-      <HeaderCell>ID</HeaderCell>
-      <Cell dataKey="id" />
-    </Column>
+import { Admin, Resource } from 'react-admin';
+import jsonServerProvider from 'ra-data-json-server';
+import data from "./admin.json"
+import { PostList } from './PostList';
 
-    <Column width={100} sortable resizable>
-      <HeaderCell>Name</HeaderCell>
-      <Cell dataKey="name" />
-    </Column>
+const Orders = () => (
+    <Admin dataProvider={jsonServerProvider('https://jsonplaceholder.typicode.com/posts')} >
+        <Resource name="posts" list={PostList} />
+    </Admin>
+);
 
-    <Column width={100} sortable resizable>
-      <HeaderCell>Email</HeaderCell>
-      <Cell>
-        {(rowData, rowIndex) => {
-          return <a href={`mailto:${rowData.email}`}>{rowData.email}</a>;
-        }}
-      </Cell>
-    </Column>
-
-  </Table>
-        </>
-    )
-}  
 export default Orders;

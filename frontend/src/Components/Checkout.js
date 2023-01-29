@@ -11,6 +11,9 @@ const CheckoutPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
 
+  const handleClick =()=>{
+    alert("Order Place Successfully")
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,8 +53,12 @@ const CheckoutPage = () => {
           Location:
           <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="checkout-input-text"/>
         </label>
+        <label className='checkout-label'>
+          email:
+          <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="checkout-input-text"/>
+        </label>
         <br />
-        <button type="submit" className='checkout-submit'>Submit</button>
+        <button type="submit" className='checkout-submit' onClick={handleClick}>Ship Product</button>
       </form>
     </div>
     </>

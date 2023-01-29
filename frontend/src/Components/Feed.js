@@ -39,7 +39,7 @@ function Feed(){
         questions()
     },[user.email])
     console.log(Questions)
-    if(Questions.length!==0){
+    if(Questions.length===0){
         return(
             <div className="feed">
             <QuoraBox text="Warehouses" />
@@ -47,15 +47,27 @@ function Feed(){
                 
                 Questions.map((wh,index)=> (<Post key={index} questions={wh.name} time={wh.createdAt} id={wh._id
                 }/>)) 
-            }        
+            }    
+            <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
+            <Post questions="Argentina " date="11/1/2023" Volume="120000 m3"/>
+            <Post questions="Andoraa" date="7/1/2023" Volume="12340 m3"/>
+            <Post questions="Australia" date="3/1/2023" Volume="12342m3"/>
+            <Post questions="Azerbaijan" date="1/1/2023" Volume="2123m3"/>    
             </div>
         )
-    }
+   }
     else{
         return(
-            <>
-            <QuoraBox style={{width:"700px"}} text="😢 Sorry No warehouses Found"/>
-            </>
+            
+            <div className="feed">
+            <QuoraBox text="Warehouses" />
+              
+            <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
+            <Post questions="Argentina " date="11/1/2023" Volume="120000 m3"/>
+            <Post questions="Unite Araba Emirates" date="7/1/2023" Volume="12340 m3"/>
+            <Post questions="Egypt" date="3/1/2023" Volume="12342m3"/>
+            <Post questions="Pakistan" date="1/1/2023" Volume="2123m3"/>    
+            </div>
         )
     }
    

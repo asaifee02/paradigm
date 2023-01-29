@@ -10,6 +10,7 @@ import Shipment from "./Components/Shipment";
 import CheckoutPage from "./Components/Checkout";
 import BuisCheckoutPage from "./Components/Business";
 import Orders from "./Components/Orders";
+import  Admin  from "./Components/admin";
 function App() {
   const auth=getAuth();
   const user = useSelector(selectUser);
@@ -41,6 +42,7 @@ function App() {
       <Route exact path="/customer" element={<CheckoutPage/>} />
       <Route exact path="/business" element={<BuisCheckoutPage/>} />
       <Route exact path="/orders" element={<Orders/>} />
+      <Route exact path="/admin" element={<Admin/>} />
       </Routes>
       
      

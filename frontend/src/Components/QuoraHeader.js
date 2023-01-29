@@ -43,7 +43,7 @@ function QuoraHeader(){
             alert(res.data.message);
         }).catch((e)=>{
             console.log(e);
-            alert("Error in adding question");
+            alert("Error in adding Warehouse");
         })
        }
     }

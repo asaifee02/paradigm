@@ -12,6 +12,8 @@ function QuoraBox(props){
 </div>
 <div className="quoraBox__quora">
  <h2 >{props.text}</h2>
+ <br/>
+ <p>{props.sub}</p>
 </div>
     </div>
 )}

@@ -1,0 +1,6 @@
+.welcome_img{
+    transform: scale(0.5);
+    position: absolute;
+    left: 18vw;
+    top: 2vw;
+}
