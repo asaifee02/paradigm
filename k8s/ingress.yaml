@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+spec:
+  tls:
+  - hosts:
+    - paradigm.asaifee.ml
+    secretName: asaifee-ml-tls
+  rules:
+  - host: paradigm.asaifee.ml
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend
+spec:
+  tls:
+  - hosts:
+    - api.asaifee.ml
+    secretName: asaifee-ml-tls
+  rules:
+  - host: api.asaifee.ml
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: model
+spec:
+  tls:
+  - hosts:
+    - predict.asaifee.ml
+    secretName: asaifee-ml-tls
+  rules:
+  - host: predict.asaifee.ml
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: model
+            port:
+              number: 80
