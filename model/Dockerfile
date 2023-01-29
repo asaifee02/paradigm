@@ -6,7 +6,7 @@ ENV NODE_ENV=production
 WORKDIR /home/node
 
 # Use the node user to run the app
-USER node:node
+#USER node:node
 
 # Install app dependencies
 COPY --chown=node:node package*.json ./
