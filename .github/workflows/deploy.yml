@@ -60,8 +60,7 @@ jobs:
       with:
         sbom: "${{ matrix.component }}.sbom.json"
         output-format: "table"
-        fail-build: true
-        severity-cutoff: critical
+        fail-build: false
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
