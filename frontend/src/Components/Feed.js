@@ -8,6 +8,7 @@ import {  useSelector } from "react-redux";
 function Feed(){
     const user = useSelector(selectUser);
     const [Questions,setQuestions]=useState([]);
+    const [warehouses,setWarehouses]=useState([]);
     console.log(user);
     useEffect(()=>{
         const questions = async () => {
@@ -18,10 +19,8 @@ function Feed(){
                 console.log(bid)
                 await axios.get(`https://api.asaifee.ml/api/warehouses/${bid}`)
                 .then((res)=>{
-                console.log("Amit");
-                console.log(res.data);
-                console.log("yo");
-                setQuestions(res.data);
+                setWarehouses(res.data);
+                console.log("amit");
             })})
             .catch((e)=>{
                 console.log(e);
@@ -39,20 +38,20 @@ function Feed(){
         questions()
     },[user.email])
     console.log(Questions)
-    if(Questions.length===0){
+    if(warehouses){
         return(
             <div className="feed">
             <QuoraBox text="Warehouses" />
             {
                 
-                Questions.map((wh,index)=> (<Post key={index} questions={wh.name} time={wh.createdAt} id={wh._id
+                warehouses.map((wh,index)=> (<Post key={index} questions={wh.Country} date={wh.createdAt} Volume={wh.MaxVolume} id={wh._id
                 }/>)) 
             }    
-            <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
+            {/* <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
             <Post questions="Argentina " date="11/1/2023" Volume="120000 m3"/>
             <Post questions="Andoraa" date="7/1/2023" Volume="12340 m3"/>
             <Post questions="Australia" date="3/1/2023" Volume="12342m3"/>
-            <Post questions="Azerbaijan" date="1/1/2023" Volume="2123m3"/>    
+            <Post questions="Azerbaijan" date="1/1/2023" Volume="2123m3"/>     */}
             </div>
         )
    }
@@ -62,11 +61,12 @@ function Feed(){
             <div className="feed">
             <QuoraBox text="Warehouses" />
               
-            <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
+            {/* <Post questions="Albania" date="23/1/2023" Volume="23000 m3"/>
             <Post questions="Argentina " date="11/1/2023" Volume="120000 m3"/>
             <Post questions="Unite Araba Emirates" date="7/1/2023" Volume="12340 m3"/>
             <Post questions="Egypt" date="3/1/2023" Volume="12342m3"/>
-            <Post questions="Pakistan" date="1/1/2023" Volume="2123m3"/>    
+            <Post questions="Pakistan" date="1/1/2023" Volume="2123m3"/>     */}
+            <h1>Sorry No warehouses found</h1>
             </div>
         )
     }

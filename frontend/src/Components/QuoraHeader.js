@@ -36,11 +36,13 @@ function QuoraHeader(){
         const body={
         email:user.email,
        Country:question,
-       MaxVolume:inputUrl
+       MaxVolume:inputUrl,
+       id:"63d45ad3af7d71ee3f8641bd"
         }
         await axios.post("https://api.asaifee.ml/api/warehouses",body,config).then((res)=>{
             console.log(res.data);
-            alert(res.data.message);
+            alert("Warehouse added successfully");
+            window.location.herf="/";
         }).catch((e)=>{
             console.log(e);
             alert("Error in adding Warehouse");

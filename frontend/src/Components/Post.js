@@ -45,7 +45,7 @@ function Post(props){
                 MaxVolume:Volume
             }).then((res)=>{
                 console.log(res.data,'----');
-                alert("Answer added successfully", JSON.stringify(res.data));
+                alert("Warehouse Updated successfully", JSON.stringify(res.data));
                 window.location.href="/"
             }).catch((err)=>{
                 console.log(err);
