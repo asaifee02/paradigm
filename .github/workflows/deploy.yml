@@ -50,7 +50,7 @@ jobs:
     - name: Scan the image and upload dependency results
       uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
       with:
-        image: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest"
+        image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ matrix.component }}:latest"
         artifact-name: ${{ matrix.component }}.spdx.json
         output-file: "~/${{ matrix.component }}.sbom.json"
 
