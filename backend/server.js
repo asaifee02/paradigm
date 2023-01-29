@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended: true}))
 app.set("json spaces", 2);
 //cors
 app.use(cors({
-  origin: ["https://api.asaifee.ml", "https://paradigm.asaifee.ml", "https://predict.asaifee.ml"],
+  origin: ["https://api.asaifee.ml", "https://paradigm.asaifee.ml", "https://predict.asaifee.ml", "https://3000-asaifee02-paradigm-qhvqf146x86.ws-us84.gitpod.io"],
   methods: ["GET", "POST", "DELETE"],
   allowedHeaders: ["Authorization", "Content-Type"],
   maxAge: 86400,
