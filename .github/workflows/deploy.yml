@@ -23,6 +23,8 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+      security-events: write
+      actions: read
 
     steps:
     - name: Checkout
@@ -34,10 +36,6 @@ jobs:
       with:
         credentials_json: '${{ secrets.GKE_SA_KEY }}'
 
-    # Setup gcloud CLI
-    # - name: Set up Cloud SDK
-    #   uses: google-github-actions/setup-gcloud@v1
-
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication (https://cloud.google.com/artifact-registry/docs/docker/authentication)
     - name: Docker configuration
@@ -48,6 +46,22 @@ jobs:
     - name: Build
       run: |-
         docker build ${{ matrix.component }} --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest"
+
+    - name: Scan the image and upload dependency results
+      uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
+      with:
+        image: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/${{ matrix.component }}:latest"
+        artifact-name: ${{ matrix.component }}.spdx.json
+        output-file: "~/${{ matrix.component }}.sbom.json"
+
+    - name: Run the Anchore Grype scan action
+      uses: anchore/scan-action@d5aa5b6cb9414b0c7771438046ff5bcfa2854ed7
+      id: scan
+      with:
+        sbom: "~/${{ matrix.component }}.sbom.json"
+        output-format: "table"
+        fail-build: true
+        severity-cutoff: critical
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
